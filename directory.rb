@@ -8,7 +8,9 @@ def input_students
   # create an empty array
   students = []
   # get the first name
-  name = gets.chomp
+  #strip removes leading and trailing whitespace
+  name = gets.strip
+  #chomp does not remove spaces, only newlines.
   cohort = gets.chomp.to_sym
   cohort = "January" if cohort.empty?
   height = gets.chomp
@@ -18,7 +20,7 @@ def input_students
     students << {name: name, cohort: cohort, height: height}
     puts "Now we have #{pluralize_students (students.count)}"
     #get another name form the user
-    name = gets.chomp
+    name = gets.strip 
     cohort = gets.chomp.to_sym
     cohort = "January" if cohort.empty?
     height = gets.chomp
