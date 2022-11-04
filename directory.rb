@@ -1,3 +1,7 @@
+def pluralize_students(n)
+  n == 1 ? "#{n} great student" : "#{n} great students" 
+end
+
 def input_students
   puts "Please enter the names, cohort, and the height of the students"
   puts "To finish, just hit return twice"
@@ -12,7 +16,7 @@ def input_students
   while !name.empty? do
     # add the student hash to the array
     students << {name: name, cohort: cohort, height: height}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{pluralize_students (students.count)}"
     #get another name form the user
     name = gets.chomp
     cohort = gets.chomp.to_sym
@@ -47,8 +51,11 @@ def print(students)
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{pluralize_students(names.count)}"
 end
+
+
+
 
 students = input_students
 #nothing happens until we call the methods
