@@ -30,11 +30,20 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    if student[:name].length < 12
-    puts "#{index + 1}.#{student[:name]},(#{student[:cohort]} cohort, height: #{student[:height]})"
+  cohorts = students.map do |student|
+    student[:cohort]
+  end
+  cohorts.uniq.each do |cohort|
+    puts "#{cohort} cohort"
+    students.each do |student|
+    puts student[:name] if student[:cohort] == cohort
     end
   end
+  # students.each_with_index do |student, index|
+  #   if student[:name].length < 12
+  #   puts "#{index + 1}.#{student[:name]},(#{student[:cohort]} cohort, height: #{student[:height]})"
+    # end
+  # end
 end
 
 def print_footer(names)
