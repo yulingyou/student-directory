@@ -26,23 +26,29 @@ def input_students
     height = gets.chomp
   end
   # return the array of students
-  students
+    students
 end
 
 
-def print_header
+def print_header(students)
+  if !students.empty?
   puts "The Students of Villains Academy"
   puts "-------------".center(20,'+')
+  end
 end
 
 def print(students)
-  cohorts = students.map do |student|
-    student[:cohort]
-  end
-  cohorts.uniq.each do |cohort|
-    puts "#{cohort} cohort"
-    students.each do |student|
-    puts student[:name] if student[:cohort] == cohort
+  if students.empty?
+    puts "There is no student yet"
+  else
+    cohorts = students.map do |student|
+      student[:cohort]
+    end
+    cohorts.uniq.each do |cohort|
+      puts "#{cohort} cohort"
+      students.each do |student|
+      puts student[:name] if student[:cohort] == cohort
+      end
     end
   end
   # students.each_with_index do |student, index|
@@ -53,14 +59,13 @@ def print(students)
 end
 
 def print_footer(names)
+  if !names.empty?
   puts "Overall, we have #{pluralize_students(names.count)}"
+  end
 end
-
-
-
 
 students = input_students
 #nothing happens until we call the methods
-print_header
+print_header(students)
 print(students)
 print_footer(students)
