@@ -1,28 +1,34 @@
-def interactive_menu
-  students = []
-  loop do
-  # 1. print the menu and ask the user what to do
+@students = [] # an empty array accessible to all methods
+
+def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "9. Exit"
-  # 2. read the input and save it into a variable
-  selection = gets.chomp
-  # 3. do what the user has asked
+  puts "9. Exit" # 9 because we'll adding more items
+end
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def process(selection)
   case selection
     when "1"
-      #input the students
-      students = input_students
+      input_students
     when "2"
-      # show the students
-      print_header(students)
-      print(students)
-      print_footer(students)
+      show_students
     when "9"
-      exit # this will cause the program to terminate
+      exit 
     else 
       puts "I dont't know what you meant, try again"
   end
-  # 4. repeat from step 1
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
   end
 end
 
@@ -34,7 +40,6 @@ def input_students
   puts "Please enter the names, cohort, and the height of the students"
   puts "To finish, just hit return twice"
   # create an empty array
-  students = []
   # get the first name
   #strip removes leading and trailing whitespace
   name = gets.strip
@@ -45,36 +50,34 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add the student hash to the array
-    students << {name: name, cohort: cohort, height: height}
-    puts "Now we have #{pluralize_students (students.count)}"
+    @students << {name: name, cohort: cohort, height: height}
+    puts "Now we have #{pluralize_students (@students.count)}"
     #get another name form the user
     name = gets.strip 
     cohort = gets.chomp.to_sym
     cohort = "January" if cohort.empty?
     height = gets.chomp
   end
-  # return the array of students
-    students
 end
 
 
-def print_header(students)
-  if !students.empty?
+def print_header
+  if !@students.empty?
   puts "The Students of Villains Academy"
   puts "-------------".center(20,'+')
   end
 end
 
-def print(students)
-  if students.empty?
+def print_students_list
+  if @students.empty?
     puts "There is no student yet"
   else
-    cohorts = students.map do |student|
+    cohorts = @students.map do |student|
       student[:cohort]
     end
     cohorts.uniq.each do |cohort|
       puts "#{cohort} cohort"
-      students.each do |student|
+      @students.each do |student|
       puts student[:name] if student[:cohort] == cohort
       end
     end
@@ -86,9 +89,9 @@ def print(students)
   # end
 end
 
-def print_footer(names)
-  if !names.empty?
-  puts "Overall, we have #{pluralize_students(names.count)}"
+def print_footer
+  if !@students.empty?
+  puts "Overall, we have #{pluralize_students(@students.count)}"
   end
 end
 
