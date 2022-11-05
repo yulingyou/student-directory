@@ -1,26 +1,5 @@
 @students = [] # an empty array accessible to all methods
 
-def load_students
-  file = File.open("students.csv", "r")
-  file.readlines.each do |line|
-  name, cohort, height = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym, height: height}
-  end
-  file.close
-end
-
-def save_students
-  # open the file for writing
-  file = File.open("students.csv", "w")
-  # iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name],student[:cohort],student[:height]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
-end
-
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
@@ -29,10 +8,11 @@ def print_menu
   puts "9. Exit" # 9 because we'll adding more items
 end
 
-def show_students
-  print_header
-  print_students_list
-  print_footer
+def interactive_menu
+  loop do
+    print_menu
+    process(STDIN.gets.chomp)
+  end
 end
 
 def process(selection)
@@ -49,44 +29,40 @@ def process(selection)
       exit 
     else 
       puts "I dont't know what you meant, try again"
-  end
-end
-
-def interactive_menu
-  loop do
-    print_menu
-    process(gets.chomp)
-  end
-end
-
-def pluralize_students(n)
-  n == 1 ? "#{n} great student" : "#{n} great students" 
+    end
 end
 
 def input_students
   puts "Please enter the names, cohort, and the height of the students"
   puts "To finish, just hit return twice"
-  # create an empty array
   # get the first name
-  #strip removes leading and trailing whitespace
-  name = gets.strip
+  name = STDIN.gets.chomp
   #chomp does not remove spaces, only newlines.
-  cohort = gets.chomp.to_sym
+  cohort = STDIN.gets.chomp
   cohort = "January" if cohort.empty?
-  height = gets.chomp
+  height = STDIN.gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add the student hash to the array
     @students << {name: name, cohort: cohort, height: height}
     puts "Now we have #{pluralize_students (@students.count)}"
     #get another name form the user
-    name = gets.strip 
-    cohort = gets.chomp.to_sym
+    name = STDIN.gets.chomp
+    cohort = STDIN.gets.chomp
     cohort = "January" if cohort.empty?
-    height = gets.chomp
+    height = STDIN.gets.chomp
   end
 end
 
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def pluralize_students(n)
+  n == 1 ? "#{n} great student" : "#{n} great students" 
+end
 
 def print_header
   if !@students.empty?
@@ -105,7 +81,7 @@ def print_students_list
     cohorts.uniq.each do |cohort|
       puts "#{cohort} cohort"
       @students.each do |student|
-      puts student[:name] if student[:cohort] == cohort
+      puts "#{student[:name]} (height:#{student[:height]})"if student[:cohort] == cohort
       end
     end
   end
@@ -122,5 +98,39 @@ def print_footer
   end
 end
 
+def save_students
+  # open the file for writing
+  file = File.open("students.csv", "w")
+  # iterate over the array of students
+  @students.each do |student|
+    student_data = [student[:name],student[:cohort],student[:height]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
+def load_students(filename = "students.csv")
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+  name, cohort, height = line.chomp.split(',')
+    @students << {name: name, cohort: cohort.to_sym, height: height}
+  end
+  file.close
+end
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exist?(filename) # if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit #quit the program
+  end
+end
+
 #nothing happens until we call the methods
+try_load_students
 interactive_menu
