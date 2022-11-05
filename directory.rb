@@ -1,3 +1,31 @@
+def interactive_menu
+  students = []
+  loop do
+  # 1. print the menu and ask the user what to do
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+  # 2. read the input and save it into a variable
+  selection = gets.chomp
+  # 3. do what the user has asked
+  case selection
+    when "1"
+      #input the students
+      students = input_students
+    when "2"
+      # show the students
+      print_header(students)
+      print(students)
+      print_footer(students)
+    when "9"
+      exit # this will cause the program to terminate
+    else 
+      puts "I dont't know what you meant, try again"
+  end
+  # 4. repeat from step 1
+  end
+end
+
 def pluralize_students(n)
   n == 1 ? "#{n} great student" : "#{n} great students" 
 end
@@ -64,8 +92,5 @@ def print_footer(names)
   end
 end
 
-students = input_students
 #nothing happens until we call the methods
-print_header(students)
-print(students)
-print_footer(students)
+interactive_menu
